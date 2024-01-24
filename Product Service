@@ -1,0 +1,119 @@
+Certainly! Creating a complete microservices project involves multiple components, and providing the entire code for such a project might be extensive. However, I can provide you with a simple example of a microservices project using Spring Boot.
+
+In this example, we'll create two microservices: one for handling product information (`product-service`) and another for handling order information (`order-service`). We'll use Spring Boot, Spring Cloud, and Spring Data JPA.
+
+1. **Product Service:**
+
+```java
+// ProductServiceApplication.java
+@SpringBootApplication
+@EnableDiscoveryClient
+public class ProductServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ProductServiceApplication.class, args);
+    }
+}
+
+// Product.java
+@Entity
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private double price;
+
+    // Getters and Setters
+}
+
+// ProductRepository.java
+public interface ProductRepository extends JpaRepository<Product, Long> {
+}
+
+// ProductController.java
+@RestController
+@RequestMapping("/products")
+public class ProductController {
+    @Autowired
+    private ProductRepository productRepository;
+
+    @GetMapping("/{productId}")
+    public ResponseEntity<Product> getProduct(@PathVariable Long productId) {
+        // Implement logic to retrieve a product by ID from the repository
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        // Implement logic to retrieve all products from the repository
+    }
+
+    // Other CRUD operations
+}
+```
+
+2. **Order Service:**
+
+```java
+// OrderServiceApplication.java
+@SpringBootApplication
+@EnableDiscoveryClient
+public class OrderServiceApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(OrderServiceApplication.class, args);
+    }
+}
+
+// Order.java
+@Entity
+public class Order {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Long productId;
+    private int quantity;
+    private double totalPrice;
+
+    // Getters and Setters
+}
+
+// OrderRepository.java
+public interface OrderRepository extends JpaRepository<Order, Long> {
+}
+
+// OrderController.java
+@RestController
+@RequestMapping("/orders")
+public class OrderController {
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @GetMapping("/{orderId}")
+    public ResponseEntity<Order> getOrder(@PathVariable Long orderId) {
+        // Implement logic to retrieve an order by ID from the repository
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+        // Implement logic to create an order and calculate total price
+    }
+
+    // Other CRUD operations
+}
+```
+
+3. **Main Application Class:**
+
+```java
+// MicroservicesApplication.java
+@SpringBootApplication
+@EnableEurekaServer
+public class MicroservicesApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MicroservicesApplication.class, args);
+    }
+}
+```
+
+These are just basic outlines of the services. You may need to add more features such as error handling, security, service discovery, etc., based on your project requirements. Also, don't forget to set up a Eureka server for service discovery.
+
+Note: This is a simplified example, and in a real-world scenario, you might need to consider more aspects like security, fault tolerance, and database configuration.
