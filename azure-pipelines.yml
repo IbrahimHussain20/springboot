@@ -4,14 +4,14 @@
 # https://aka.ms/yaml
 
 trigger:
- branches:
-   include:
-     - master
+  branches:
+    include:
+      - master
 
 pr:
- branches:
-   include:
-     - master    
+  branches:
+    include:
+      - master    
 
 pool:
   vmImage: ubuntu-latest
@@ -25,10 +25,15 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-
-  - stage: 'build artifact'
-     displayname: 'build artifact'
-   jobs:
-      -job: 'buildartifact'
-     steps:
-       - task: maven@3
+# 👇 Added build stage correctly formatted
+stages:
+- stage: 'BuildArtifact'
+  displayName: 'Build Artifact'
+  jobs:
+  - job: 'BuildArtifactJob'
+    displayName: 'Build Artifact Job'
+    steps:
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'package'
