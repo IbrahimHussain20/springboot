@@ -4,7 +4,14 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+ branches:
+   include:
+     - master
+
+pr:
+ branches:
+   include:
+     - master    
 
 pool:
   vmImage: ubuntu-latest
@@ -17,3 +24,11 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+
+
+  - stage: 'build artifact'
+     displayname: 'build artifact'
+   jobs:
+      -job: 'buildartifact'
+     steps:
+       - task: maven@3
